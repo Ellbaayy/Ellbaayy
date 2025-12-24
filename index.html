@@ -14,6 +14,7 @@
             box-sizing: border-box;
         }
 
+        /* --- LIGHT THEME VARIABLES (DEFAULT) --- */
         :root {
             /* Canva Inspired Colors */
             --primary: #00C4CC; /* Canva Cyan */
@@ -33,6 +34,25 @@
             --success: #10b981;
         }
 
+        /* --- DARK THEME VARIABLES --- */
+        [data-theme="dark"] {
+            --primary: #00C4CC; 
+            --primary-dark: #009ea3;
+            --secondary: #9f7aea;
+            --sidebar-bg: #050505;
+            --topbar-bg: #1f2937;
+            --workspace-bg: #111827;
+            --panel-bg: #1f2937;
+            --text-dark: #f3f4f6;
+            --text-light: #9ca3af;
+            --selection-border: #00C4CC;
+            --handle-color: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --success: #10b981;
+        }
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--workspace-bg);
@@ -40,6 +60,7 @@
             height: 100vh;
             overflow: hidden; /* App-like feel, scrolling inside workspace */
             display: flex;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* --- BACKGROUND PATTERN (DOT GRID) --- */
@@ -49,10 +70,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-image: radial-gradient(var(--text-light) 1px, transparent 1px); /* Dot color follows theme */
             background-size: 20px 20px;
             z-index: -1;
             pointer-events: none;
+            opacity: 0.1; /* Fade dots slightly in dark mode if needed */
         }
 
         /* --- SIDEBAR (LEFT) --- */
@@ -111,7 +133,7 @@
         .nav-tooltip {
             position: absolute;
             left: 60px;
-            background: var(--text-dark);
+            background: var(--text-dark); /* Tooltip adapts to theme */
             color: white;
             padding: 4px 8px;
             border-radius: 4px;
@@ -140,12 +162,13 @@
         .top-bar {
             height: 56px;
             background-color: var(--topbar-bg);
-            border-bottom: 1px solid #e5e7eb;
+            border-bottom: 1px solid var(--text-light);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 1.5rem;
             flex-shrink: 0;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
         }
 
         .project-info {
@@ -186,7 +209,7 @@
             background: transparent;
             color: var(--text-dark);
         }
-        .btn-ghost:hover { background: #f3f4f6; }
+        .btn-ghost:hover { background: rgba(255, 255, 255, 0.1); }
 
         .btn-primary {
             background: linear-gradient(90deg, #7e22ce 0%, #00C4CC 100%);
@@ -238,12 +261,12 @@
 
         /* --- EDITABLE CARD (HERO) --- */
         .artboard {
-            background: white;
+            background: var(--panel-bg);
             box-shadow: var(--shadow-lg);
             border-radius: 4px; /* Slight radius, mostly sharp like Canva */
             overflow: hidden;
             position: relative;
-            transition: box-shadow 0.3s ease;
+            transition: box-shadow 0.3s ease, background-color 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -331,6 +354,7 @@
         .section-title {
             font-size: 1.25rem;
             font-weight: 700;
+            color: var(--text-dark);
         }
 
         .template-scroller {
@@ -339,18 +363,19 @@
             overflow-x: auto;
             padding-bottom: 1rem;
             scrollbar-width: thin;
-            scrollbar-color: #cbd5e1 transparent;
+            scrollbar-color: var(--text-light) transparent;
         }
         
         .template-card {
             min-width: 280px;
-            background: white;
+            background: var(--panel-bg);
             border-radius: 8px;
             overflow: hidden;
             box-shadow: var(--shadow-sm);
             transition: all 0.3s ease;
             position: relative;
             border: 1px solid transparent;
+            transition: background-color 0.3s ease;
         }
 
         .template-card:hover {
@@ -384,6 +409,7 @@
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 0.5rem;
+            color: var(--text-dark);
         }
         
         .template-info p {
@@ -411,18 +437,20 @@
         }
 
         .content-panel {
-            background: white;
+            background: var(--panel-bg);
             border-radius: 8px;
             padding: 1.5rem;
             box-shadow: var(--shadow-sm);
+            transition: background-color 0.3s ease;
         }
 
         .properties-sidebar {
-            background: white;
+            background: var(--panel-bg);
             border-radius: 8px;
             padding: 1.5rem;
             box-shadow: var(--shadow-sm);
             height: fit-content;
+            transition: background-color 0.3s ease;
         }
 
         /* Form Canva Style */
@@ -441,11 +469,13 @@
         .input-canva {
             width: 100%;
             padding: 0.6rem 0.8rem;
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--text-light);
             border-radius: 6px;
             font-family: inherit;
             font-size: 0.9rem;
             transition: border-color 0.2s;
+            background-color: var(--panel-bg); /* Input bg adapts */
+            color: var(--text-dark);
         }
 
         .input-canva:focus {
@@ -462,7 +492,7 @@
             font-weight: 700;
             margin-bottom: 1rem;
             padding-bottom: 0.5rem;
-            border-bottom: 1px solid #f3f4f6;
+            border-bottom: 1px solid var(--text-light);
         }
 
         /* --- COLOR PALETTE (TESTIMONIALS) --- */
@@ -474,10 +504,11 @@
         
         .testimonial-swatch {
             width: 100%;
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            background: var(--panel-bg); /* Card adapts */
+            border: 1px solid var(--text-light);
             border-radius: 8px;
             padding: 1rem;
+            transition: background-color 0.3s ease;
         }
         
         .swatch-header {
@@ -505,23 +536,24 @@
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            background: white;
+            background: var(--panel-bg);
             border-radius: 8px;
             box-shadow: var(--shadow-lg);
             overflow: hidden;
             display: grid;
             grid-template-columns: 1.5fr 1fr;
             min-height: 500px;
+            transition: background-color 0.3s ease;
         }
 
         .checkout-form {
             padding: 2rem;
-            border-right: 1px solid #e5e7eb;
+            border-right: 1px solid var(--text-light);
         }
 
         .checkout-summary {
             padding: 2rem;
-            background: #f9fafb;
+            background: rgba(0, 0, 0, 0.03); /* Slight tint background */
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -534,7 +566,7 @@
         }
 
         .payment-method {
-            border: 1px solid #e5e7eb;
+            border: 1px solid var(--text-light);
             border-radius: 8px;
             padding: 1rem;
             display: flex;
@@ -543,11 +575,11 @@
             transition: 0.2s;
         }
 
-        .payment-method:hover { border-color: var(--primary); background: #f0fdfe; }
-        .payment-method.active { border: 2px solid var(--primary); background: #f0fdfe; }
+        .payment-method:hover { border-color: var(--primary); background: rgba(0, 196, 204, 0.05); }
+        .payment-method.active { border: 2px solid var(--primary); background: rgba(0, 196, 204, 0.05); }
 
         .radio-circle {
-            width: 18px; height: 18px; border: 2px solid #d1d5db; border-radius: 50%; margin-right: 1rem; position: relative;
+            width: 18px; height: 18px; border: 2px solid var(--text-light); border-radius: 50%; margin-right: 1rem; position: relative;
         }
         .payment-method.active .radio-circle { border-color: var(--primary); }
         .payment-method.active .radio-circle::after {
@@ -558,10 +590,10 @@
         .payment-icon { font-size: 1.5rem; margin-right: 1rem; width: 40px; text-align: center; }
         .logo-dana { color: #118eea; } .logo-gopay { color: #00b14f; } .logo-bca { color: #003cba; }
 
-        .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 0.9rem; }
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 0.9rem; color: var(--text-dark); }
         .total-row {
-            border-top: 1px solid #e5e7eb; margin-top: 1rem; padding-top: 1rem;
-            display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; color: var(--primary-dark);
+            border-top: 1px solid var(--text-light); margin-top: 1rem; padding-top: 1rem;
+            display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; color: var(--text-dark);
         }
 
         .btn-pay {
@@ -579,7 +611,7 @@
         }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
         .modal-card {
-            background: white; padding: 2.5rem; border-radius: 12px; text-align: center; max-width: 400px;
+            background: var(--panel-bg); padding: 2.5rem; border-radius: 12px; text-align: center; max-width: 400px;
             transform: scale(0.8); transition: 0.3s;
         }
         .modal-overlay.show .modal-card { transform: scale(1); }
@@ -708,10 +740,15 @@
                     <span id="pageTitle">Design Studio Services</span>
                     <i class="fas fa-pen" style="font-size: 0.8rem; color: var(--text-light); margin-left: 8px;"></i>
                 </div>
-                <span style="font-size: 0.8rem; color: var(--text-light); background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">Auto-saved</span>
+                <span style="font-size: 0.8rem; color: var(--text-light); background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 4px;">Auto-saved</span>
             </div>
 
             <div class="project-actions">
+                <!-- THEME TOGGLE BUTTON (MOON ICON) -->
+                <button class="btn-canva btn-ghost" onclick="toggleTheme()" id="themeToggleBtn">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+
                 <button class="btn-canva btn-ghost" onclick="showToast('Presentation Mode Active')">
                     <i class="fas fa-play"></i> Present
                 </button>
@@ -735,7 +772,7 @@
                 <!-- ARTBOARD HERO (Interactive Draggable Text) -->
                 <div class="artboard">
                     <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 5px;">
-                        <span style="background: #f3f4f6; padding: 2px 5px; border-radius: 3px; font-size: 10px;">100%</span>
+                        <span style="background: rgba(0,0,0,0.1); padding: 2px 5px; border-radius: 3px; font-size: 10px;">100%</span>
                     </div>
 
                     <!-- Draggable Container -->
@@ -757,7 +794,7 @@
                         <button class="btn-canva btn-primary" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
                             Start Designing
                         </button>
-                        <button class="btn-canva btn-ghost" style="border: 1px solid #e5e7eb;">
+                        <button class="btn-canva btn-ghost" style="border: 1px solid var(--text-light);">
                             View Portfolio
                         </button>
                     </div>
@@ -827,15 +864,15 @@
                         </div>
                         
                         <!-- Canva Integration -->
-                        <div style="width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; margin-bottom: 2rem;">
-                            <div style="background: #f9fafb; padding: 0.5rem 1rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
-                                <span style="font-size: 0.85rem; font-weight: 600;"><i class="fas fa-layer-group" style="color: var(--primary); margin-right: 5px;"></i> Canva Editor Preview</span>
+                        <div style="width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid var(--text-light); margin-bottom: 2rem;">
+                            <div style="background: rgba(0,0,0,0.05); padding: 0.5rem 1rem; border-bottom: 1px solid var(--text-light); display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.85rem; font-weight: 600; color: var(--text-dark);"><i class="fas fa-layer-group" style="color: var(--primary); margin-right: 5px;"></i> Canva Editor Preview</span>
                                 <button style="border: none; background: none; color: var(--text-light); cursor: pointer;"><i class="fas fa-expand"></i></button>
                             </div>
                             <iframe src="https://www.canva.com/design/DAG744Vv9cg/QIs9xAqY1t0T1ONcKv6HsA/view?embed" width="100%" height="350" allowfullscreen></iframe>
                         </div>
 
-                        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Client Gallery</h3>
+                        <h3 style="margin-bottom: 1rem; font-size: 1rem; color: var(--text-dark);">Client Gallery</h3>
                         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
                             <!-- Gallery Items -->
                             <div style="aspect-ratio: 1; background: #eee; border-radius: 8px; overflow: hidden; position: relative; group-hover:opacity-80;">
@@ -863,11 +900,11 @@
                         
                         <!-- Pricing Items styled as Layers/Settings -->
                         <div style="display: flex; flex-direction: column; gap: 1rem;">
-                            <!-- BASIC -->
-                            <div style="border: 1px solid #9ca3af; border-radius: 6px; padding: 1rem; position: relative;">
-                                <div style="position: absolute; top: -8px; left: 10px; background: #9ca3af; color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">STANDARD</div>
+                            <!-- BASIC (Updated with Standard Label) -->
+                            <div style="border: 1px solid var(--text-light); border-radius: 6px; padding: 1rem; position: relative;">
+                                <div style="position: absolute; top: -8px; left: 10px; background: var(--text-light); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">STANDARD</div>
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                                    <span style="font-weight: 600; font-size: 0.9rem;">Basic</span>
+                                    <span style="font-weight: 600; font-size: 0.9rem; color: var(--text-dark);">Basic</span>
                                     <span style="color: var(--text-light); font-size: 0.85rem;">Rp 500k</span>
                                 </div>
                                 <ul style="list-style: none; font-size: 0.8rem; color: var(--text-light); margin-bottom: 0.8rem; line-height: 1.4;">
@@ -880,7 +917,7 @@
                             </div>
 
                             <!-- PROFESSIONAL -->
-                            <div style="border: 2px solid var(--primary); border-radius: 6px; padding: 1rem; background: #f0fdfe; position: relative;">
+                            <div style="border: 2px solid var(--primary); border-radius: 6px; padding: 1rem; background: rgba(0, 196, 204, 0.05); position: relative;">
                                 <div style="position: absolute; top: -8px; left: 10px; background: var(--primary); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">BEST VALUE</div>
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                                     <span style="font-weight: 700; font-size: 0.95rem; color: var(--primary-dark);">Professional</span>
@@ -896,7 +933,7 @@
                             </div>
 
                             <!-- CORPORATE -->
-                            <div style="border: 2px solid #fbbf24; border-radius: 6px; padding: 1rem; background: #fffbeb; position: relative;">
+                            <div style="border: 2px solid #fbbf24; border-radius: 6px; padding: 1rem; background: rgba(251, 191, 36, 0.05); position: relative;">
                                 <div style="position: absolute; top: -8px; left: 10px; background: #fbbf24; color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">PREMIUM</div>
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
                                     <span style="font-weight: 700; font-size: 0.95rem; color: #b45309;">Corporate</span>
@@ -950,7 +987,7 @@
                             <div class="swatch-header">
                                 <div class="swatch-avatar">HS</div>
                                 <div>
-                                    <div style="font-weight: 700; font-size: 0.9rem;">HASAN</div>
+                                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-dark);">HASAN</div>
                                     <div style="font-size: 0.75rem; color: var(--text-light);">CEO, Tech Startup</div>
                                 </div>
                             </div>
@@ -961,7 +998,7 @@
                             <div class="swatch-header">
                                 <div class="swatch-avatar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">OM</div>
                                 <div>
-                                    <div style="font-weight: 700; font-size: 0.9rem;">OMAN</div>
+                                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-dark);">OMAN</div>
                                     <div style="font-size: 0.75rem; color: var(--text-light);">Marketing Manager</div>
                                 </div>
                             </div>
@@ -972,7 +1009,7 @@
                             <div class="swatch-header">
                                 <div class="swatch-avatar" style="background: linear-gradient(135deg, #10b981, #3b82f6);">RY</div>
                                 <div>
-                                    <div style="font-weight: 700; font-size: 0.9rem;">ROY</div>
+                                    <div style="font-weight: 700; font-size: 0.9rem; color: var(--text-dark);">ROY</div>
                                     <div style="font-size: 0.75rem; color: var(--text-light);">Event Organizer</div>
                                 </div>
                             </div>
@@ -1009,17 +1046,17 @@
                                 <div class="payment-method" onclick="selectPayment(this)">
                                     <div class="radio-circle"></div>
                                     <div class="payment-icon logo-dana"><i class="fas fa-wallet"></i></div>
-                                    <div><h4 style="font-size: 0.9rem; font-weight: 600;">DANA</h4><p style="font-size: 0.8rem; color: #666;">Scan QR / Transfer</p></div>
+                                    <div><h4 style="font-size: 0.9rem; font-weight: 600; color: var(--text-dark);">DANA</h4><p style="font-size: 0.8rem; color: #666;">Scan QR / Transfer</p></div>
                                 </div>
                                 <div class="payment-method" onclick="selectPayment(this)">
                                     <div class="radio-circle"></div>
                                     <div class="payment-icon logo-gopay"><i class="fas fa-bicycle"></i></div>
-                                    <div><h4 style="font-size: 0.9rem; font-weight: 600;">GoPay</h4><p style="font-size: 0.8rem; color: #666;">Instant Payment</p></div>
+                                    <div><h4 style="font-size: 0.9rem; font-weight: 600; color: var(--text-dark);">GoPay</h4><p style="font-size: 0.8rem; color: #666;">Instant Payment</p></div>
                                 </div>
                                 <div class="payment-method" onclick="selectPayment(this)">
                                     <div class="radio-circle"></div>
                                     <div class="payment-icon logo-bca"><i class="fas fa-university"></i></div>
-                                    <div><h4 style="font-size: 0.9rem; font-weight: 600;">BCA Mobile</h4><p style="font-size: 0.8rem; color: #666;">Virtual Account</p></div>
+                                    <div><h4 style="font-size: 0.9rem; font-weight: 600; color: var(--text-dark);">BCA Mobile</h4><p style="font-size: 0.8rem; color: #666;">Virtual Account</p></div>
                                 </div>
                             </div>
                             <input type="hidden" id="selectedPayment" name="payment_method">
@@ -1029,10 +1066,10 @@
                     <!-- RIGHT: SUMMARY -->
                     <div class="checkout-summary">
                         <div>
-                            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af;">Order Summary</h3>
-                            <div class="summary-row"><span>Design Plan</span><span id="summaryPlan">Professional</span></div>
-                            <div class="summary-row"><span>Fee</span><span>Rp 0</span></div>
-                            <div class="total-row"><span>Total</span><span id="summaryTotal">Rp 1.500.000</span></div>
+                            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light);">Order Summary</h3>
+                            <div class="summary-row"><span style="color: var(--text-dark);">Design Plan</span><span id="summaryPlan" style="color: var(--text-dark);">Professional</span></div>
+                            <div class="summary-row"><span style="color: var(--text-dark);">Fee</span><span style="color: var(--text-dark);">Rp 0</span></div>
+                            <div class="total-row"><span style="color: var(--text-dark);">Total</span><span id="summaryTotal" style="color: var(--text-dark);">Rp 1.500.000</span></div>
                         </div>
                         <div>
                             <button type="button" class="btn-pay" onclick="processPayment()">Pay Now <i class="fas fa-arrow-right"></i></button>
@@ -1060,6 +1097,23 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
+        // --- NEW FUNCTION: THEME TOGGLE ---
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'dark') {
+                body.setAttribute('data-theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
         // --- NAVIGATION & VIEW LOGIC ---
         function goHome() {
             document.getElementById('view-checkout').classList.add('hidden');
