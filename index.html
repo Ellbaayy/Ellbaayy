@@ -252,7 +252,7 @@
             cursor: default;
         }
         
-        /* Interactive "Selected" State simulation for the main text */
+        /* Interactive "Selected" State simulation for main text */
         .draggable-wrapper {
             position: relative;
             padding: 4px;
@@ -598,7 +598,7 @@
             .sidebar {
                 position: fixed;
                 bottom: 0;
-                left: 0,
+                left: 0;
                 width: 100%;
                 height: 60px;
                 flex-direction: row;
@@ -645,10 +645,10 @@
 
         /* Toast Notification */
         .toast-container {
-            position: fixed,
-            bottom: 20px,
-            right: 20px,
-            z-index: 9999,
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
         }
         .toast {
             background: #1f2937;
@@ -689,21 +689,13 @@
             <i class="fas fa-th-large"></i>
             <span class="nav-tooltip">Templates</span>
         </div>
-        
-        <div class="nav-item" onclick="switchTab(this, 'elements')">
-            <i class="fas fa-vector-square"></i>
-            <span class="nav-tooltip">Elements</span>
-        </div>
-        
-        <div class="nav-item" onclick="switchTab(this, 'text')">
-            <i class="fas fa-font"></i>
-            <span class="nav-tooltip">Text</span>
+
+        <!-- NEW MENU: RECENT DESIGNS -->
+        <div class="nav-item" onclick="switchTab(this, 'recent')">
+            <i class="fas fa-layer-group"></i>
+            <span class="nav-tooltip">Recent Designs</span>
         </div>
 
-        <div class="nav-item" onclick="switchTab(this, 'projects')">
-            <i class="fas fa-folder-open"></i>
-            <span class="nav-tooltip">My Projects</span>
-        </div>
     </aside>
 
     <!-- MAIN WRAPPER -->
@@ -871,7 +863,7 @@
                         
                         <!-- Pricing Items styled as Layers/Settings -->
                         <div style="display: flex; flex-direction: column; gap: 1rem;">
-                            <!-- BASIC (Updated with Standard Label) -->
+                            <!-- BASIC -->
                             <div style="border: 1px solid #9ca3af; border-radius: 6px; padding: 1rem; position: relative;">
                                 <div style="position: absolute; top: -8px; left: 10px; background: #9ca3af; color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">STANDARD</div>
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
@@ -962,7 +954,7 @@
                                     <div style="font-size: 0.75rem; color: var(--text-light);">CEO, Tech Startup</div>
                                 </div>
                             </div>
-                            <p style="font-style: italic; font-size: 0.85rem; color: var(--text-dark);">"The logo design is very professional. I really like the color variations!"</p>
+                            <p style="font-style: italic; font-size: 0.85rem; color: var(--text-dark);">"The logo design is very professional. I really like to color variations!"</p>
                         </div>
 
                         <div class="testimonial-swatch" style="flex: 1; min-width: 250px;">
@@ -1059,7 +1051,8 @@
             <div class="success-icon"><i class="fas fa-check"></i></div>
             <h2>Payment Successful!</h2>
             <p style="color: #666; margin: 1rem 0;">Thank you! A confirmation has been sent to your email and WhatsApp.</p>
-            <button class="btn-canva btn-primary" style="width: 100%; justify-content: center;" onclick="goHome()">Back to Home</button>
+            <!-- FIXED: Button calls dismissModal, NOT goHome -->
+            <button class="btn-canva btn-primary" style="width: 100%; justify-content: center;" onclick="dismissModal()">Back to Home</button>
         </div>
     </div>
 
@@ -1074,6 +1067,12 @@
             document.getElementById('pageTitle').innerText = "Design Studio Services";
             // Reset scroll
             document.querySelector('.workspace').scrollTop = 0;
+        }
+
+        // --- NEW FUNCTION: DISMISS MODAL ---
+        // Hanya menutup modal, tidak mengubah tampilan view (tetap di checkout)
+        function dismissModal() {
+            document.getElementById('successModal').classList.remove('show');
         }
 
         function switchTab(element, tabName) {
@@ -1091,9 +1090,12 @@
                 document.querySelector('.workspace').scrollTo({top: 0, behavior: 'smooth'});
             } else if (tabName === 'templates') {
                 document.getElementById('services').scrollIntoView({behavior: 'smooth'});
-            } else if (tabName === 'projects') {
-                // Just a feedback toast for demo
-                showToast('Opening Projects Folder...');
+            } else if (tabName === 'recent') {
+                // NEW FEATURE: Scroll to Recent Designs section
+                const recentSection = document.querySelector('.content-panel');
+                if(recentSection) {
+                    recentSection.scrollIntoView({behavior: 'smooth'});
+                }
             }
         }
 
