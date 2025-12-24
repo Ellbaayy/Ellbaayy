@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Design Studio Premium - Logo, Banner, Poster</title>
+    <title>Design Studio - Editor Style</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+        /* --- RESET & VARIABLES --- */
         * {
             margin: 0;
             padding: 0;
@@ -14,1373 +15,1252 @@
         }
 
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #ec4899;
-            --dark: #1f2937;
-            --light: #f9fafb;
-            --gray: #6b7280;
-            --white: #ffffff;
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
+            /* Canva Inspired Colors */
+            --primary: #00C4CC; /* Canva Cyan */
+            --primary-dark: #009ea3;
+            --secondary: #7e22ce; /* Canva Purple */
+            --sidebar-bg: #0e1318;
+            --topbar-bg: #ffffff;
+            --workspace-bg: #e2e2e2;
+            --panel-bg: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #9ca3af;
+            --selection-border: #00C4CC;
+            --handle-color: #ffffff;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --success: #10b981;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            overflow-x: hidden;
-            font-size: 16px;
+            background-color: var(--workspace-bg);
+            color: var(--text-dark);
+            height: 100vh;
+            overflow: hidden; /* App-like feel, scrolling inside workspace */
+            display: flex;
         }
 
-        /* Header Styles */
-        .header {
+        /* --- BACKGROUND PATTERN (DOT GRID) --- */
+        .bg-pattern {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow);
-            z-index: 1000;
-            padding: 1rem 0;
-            transition: var(--transition);
+            height: 100%;
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: -1;
+            pointer-events: none;
         }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
+        /* --- SIDEBAR (LEFT) --- */
+        .sidebar {
+            width: 72px;
+            background-color: var(--sidebar-bg);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 1rem;
+            flex-shrink: 0;
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+
+        .sidebar-logo {
+            color: var(--white);
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            cursor: pointer;
+        }
+
+        .nav-item {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+        }
+
+        .nav-item.active::after {
+            content: '';
+            position: absolute;
+            left: -16px;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 20px;
+            width: 4px;
+            background-color: var(--primary);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .nav-tooltip {
+            position: absolute;
+            left: 60px;
+            background: var(--text-dark);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            white-space: nowrap;
+            z-index: 1000;
+        }
+
+        .nav-item:hover .nav-tooltip {
+            opacity: 1;
+        }
+
+        /* --- MAIN AREA --- */
+        .main-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- TOP BAR --- */
+        .top-bar {
+            height: 56px;
+            background-color: var(--topbar-bg);
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 0 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .project-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .project-title {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-canva {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--text-dark);
+        }
+        .btn-ghost:hover { background: #f3f4f6; }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #7e22ce 0%, #00C4CC 100%);
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 196, 204, 0.3);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 4px 8px rgba(0, 196, 204, 0.4);
+            transform: translateY(-1px);
+        }
+        
+        .btn-gold {
+            background: linear-gradient(90deg, #d97706 0%, #fbbf24 100%);
+            color: white;
+            box-shadow: 0 2px 4px rgba(251, 191, 36, 0.3);
+        }
+        .btn-gold:hover {
+            box-shadow: 0 4px 8px rgba(251, 191, 36, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* --- WORKSPACE / SCROLLABLE AREA --- */
+        .workspace {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        /* --- VIEW MANAGER (NEW) --- */
+        /* This handles switching between Home and Checkout without reloading */
+        .view-section {
+            display: block; /* Default visible */
+            animation: fadeIn 0.4s ease;
+        }
+
+        .hidden { display: none !important; }
+
+        .canvas-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            padding-bottom: 4rem;
+        }
+
+        /* --- EDITABLE CARD (HERO) --- */
+        .artboard {
+            background: white;
+            box-shadow: var(--shadow-lg);
+            border-radius: 4px; /* Slight radius, mostly sharp like Canva */
+            overflow: hidden;
+            position: relative;
+            transition: box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 4rem 2rem;
+            cursor: default;
+        }
+        
+        /* Interactive "Selected" State simulation for the main text */
+        .draggable-wrapper {
+            position: relative;
+            padding: 4px;
+            cursor: move; /* Indicates draggable */
+            border: 2px dashed transparent;
+            transition: all 0.2s;
+            max-width: 100%;
+        }
+
+        .draggable-wrapper:hover {
+            border: 2px dashed var(--primary);
+            background: rgba(0, 196, 204, 0.05);
+        }
+        
+        /* Selection Handles (visual only) */
+        .resize-handle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            display: none; /* Show only on interaction */
+            z-index: 10;
+        }
+        .draggable-wrapper:hover .resize-handle { display: block; }
+
+        .rh-tl { top: -4px; left: -4px; }
+        .rh-tr { top: -4px; right: -4px; }
+        .rh-bl { bottom: -4px; left: -4px; }
+        .rh-br { bottom: -4px; right: -4px; }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            pointer-events: none; /* Let click pass to wrapper */
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            pointer-events: none;
+        }
+
+        .element-tag {
+            position: absolute;
+            top: -24px;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+        }
+        
+        .draggable-wrapper:hover .element-tag { opacity: 1; }
+
+
+        /* --- TEMPLATES (SERVICES) --- */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .template-scroller {
+            display: flex;
+            gap: 1.5rem;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+        
+        .template-card {
+            min-width: 280px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid transparent;
+        }
+
+        .template-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary);
+        }
+
+        .template-preview {
+            height: 180px;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .template-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .template-info {
+            padding: 1rem;
+        }
+
+        .template-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .template-info p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+        }
+
+        .template-action {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            transition: var(--transition);
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--dark);
-            font-weight: 500;
-            transition: var(--transition);
-            position: relative;
-            font-size: 0.9rem;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary);
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -3px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: var(--transition);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .mobile-menu {
-            display: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            z-index: 1001;
-        }
-
-        /* Mobile Menu Overlay */
-        .mobile-menu-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .mobile-menu-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            padding: 2rem;
-        }
-
-        .mobile-nav-links {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-            text-align: center;
-        }
-
-        .mobile-nav-links a {
-            color: var(--white);
-            font-size: 1.2rem;
-            font-weight: 600;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .mobile-nav-links a:hover {
-            color: var(--primary);
-            transform: scale(1.1);
-        }
-
-        .mobile-close {
-            position: absolute;
-            top: 2rem;
-            right: 2rem;
-            color: var(--white);
-            font-size: 2rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .mobile-close:hover {
-            color: var(--primary);
-            transform: rotate(90deg);
-        }
-
-        /* Hero Section */
-        .hero {
-            margin-top: 70px;
-            padding: 4rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--white);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('https://picsum.photos/seed/design/1920/1080.jpg') center/cover;
-            opacity: 0.2;
-            z-index: 1;
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 2.2rem;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-            animation: fadeInUp 1s ease;
-        }
-
-        .hero p {
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            opacity: 0.9;
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-
-        .cta-buttons {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 1.5rem;
-        }
-
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            min-width: 140px;
-            justify-content: center;
-        }
-
-        .btn-primary {
-            background: var(--white);
-            color: var(--primary);
-            box-shadow: var(--shadow);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid var(--white);
-        }
-
-        .btn-secondary:hover {
-            background: var(--white);
-            color: var(--primary);
-        }
-
-        /* Services Section */
-        .services {
-            padding: 4rem 1.5rem;
-            background: var(--light);
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title h2 {
-            font-size: 2rem;
-            margin-bottom: 0.8rem;
-            color: var(--dark);
-        }
-
-        .section-title p {
-            font-size: 1rem;
-            color: var(--gray);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .services-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .service-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--primary);
-        }
-
-        .service-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-            color: var(--white);
-        }
-
-        .service-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.8rem;
-            color: var(--dark);
-        }
-
-        .service-card p {
-            color: var(--gray);
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-
-        .service-features {
-            list-style: none;
-        }
-
-        .service-features li {
-            margin-bottom: 0.6rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--dark);
-            font-size: 0.9rem;
-        }
-
-        .service-features li i {
-            color: var(--primary);
-            font-size: 0.8rem;
-        }
-
-        /* Canva Integration Section */
-        .canva-section {
-            padding: 4rem 1.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: var(--white);
-            text-align: center;
-        }
-
-        .canva-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .canva-content h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .canva-content p {
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            opacity: 0.9;
-        }
-
-        .canva-preview {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            backdrop-filter: blur(10px);
-            margin-bottom: 1.5rem;
-        }
-
-        .canva-iframe {
-            width: 100%;
-            height: 300px;
-            border: none;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        /* Portfolio Section */
-        .portfolio {
-            padding: 4rem 1.5rem;
-            background: var(--white);
-        }
-
-        .portfolio-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .portfolio-item {
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            cursor: pointer;
-        }
-
-        .portfolio-item:hover {
-            transform: scale(1.02);
-        }
-
-        .portfolio-item img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .portfolio-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .portfolio-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            padding: 1.5rem;
-            color: var(--white);
-        }
-
-        .portfolio-overlay h3 {
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .portfolio-overlay p {
-            font-size: 0.8rem;
-            opacity: 0.9;
-        }
-
-        /* Testimonials Section */
-        .testimonials {
-            padding: 4rem 1.5rem;
-            background: var(--light);
-        }
-
-        .testimonials-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .testimonial-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            position: relative;
-        }
-
-        .testimonial-card::before {
-            content: '"';
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            font-size: 3rem;
-            color: var(--primary);
-            opacity: 0.2;
-            font-family: serif;
-        }
-
-        .testimonial-content {
-            margin-bottom: 1rem;
-            font-style: italic;
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .author-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            font-weight: bold;
-            font-size: 0.8rem;
-        }
-
-        .author-info h4 {
-            font-size: 0.9rem;
-            margin-bottom: 0.1rem;
-        }
-
-        .author-info p {
-            font-size: 0.8rem;
-            color: var(--gray);
-        }
-
-        /* Pricing Section */
-        .pricing {
-            padding: 4rem 1.5rem;
-            background: var(--white);
-        }
-
-        .pricing-grid {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .pricing-card {
-            background: var(--light);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pricing-card.featured {
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: var(--white);
-            transform: scale(1.03);
-            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.3);
-        }
-
-        .pricing-card.featured .price {
-            color: var(--white);
-        }
-
-        .pricing-card.featured .btn {
-            background: var(--white);
-            color: var(--primary);
-        }
-
-        .pricing-card.featured .btn:hover {
-            background: var(--secondary);
-            color: var(--white);
-        }
-
-        .pricing-card h3 {
-            font-size: 1.2rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .price {
-            font-size: 2rem;
+        .price-tag {
             font-weight: 700;
-            margin: 1rem 0;
-            color: var(--primary);
+            color: var(--primary-dark);
         }
 
-        .price span {
+        /* --- PROPERTIES PANEL (CANVA IFRAME & CONTACT) --- */
+        .panel-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        .content-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .properties-sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+        }
+
+        /* Form Canva Style */
+        .form-group-canva {
+            margin-bottom: 1.2rem;
+        }
+        
+        .form-group-canva label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+            color: var(--text-dark);
+        }
+
+        .input-canva {
+            width: 100%;
+            padding: 0.6rem 0.8rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-family: inherit;
             font-size: 0.9rem;
-            font-weight: 400;
-            color: var(--gray);
+            transition: border-color 0.2s;
         }
 
-        .pricing-features {
-            list-style: none;
-            margin: 1.5rem 0;
-            text-align: left;
+        .input-canva:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 196, 204, 0.1);
         }
 
-        .pricing-features li {
-            padding: 0.6rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+        .property-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-light);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        /* --- COLOR PALETTE (TESTIMONIALS) --- */
+        .color-grid {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .testimonial-swatch {
+            width: 100%;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .swatch-header {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            font-size: 0.9rem;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .swatch-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
         }
 
-        .pricing-features li i {
-            color: var(--primary);
-        }
-
-        .featured .pricing-features li i {
-            color: var(--white);
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 4rem 1.5rem;
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: var(--white);
-        }
-
-        .contact-content {
+        /* --- CHECKOUT STYLES (INTEGRATED) --- */
+        .checkout-container {
+            width: 100%;
             max-width: 800px;
             margin: 0 auto;
-            text-align: center;
-        }
-
-        .contact-content h2 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-
-        .contact-content p {
-            font-size: 1rem;
-            margin-bottom: 1.5rem;
-            opacity: 0.9;
-        }
-
-        .contact-form {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 0.8rem;
-            border: none;
+            background: white;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.2);
-            color: var(--white);
-            font-family: 'Poppins', sans-serif;
-            font-size: 0.9rem;
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .form-row {
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
+            grid-template-columns: 1.5fr 1fr;
+            min-height: 500px;
         }
 
-        /* Footer */
-        .footer {
-            background: var(--dark);
-            color: var(--light);
-            padding: 3rem 1.5rem;
+        .checkout-form {
+            padding: 2rem;
+            border-right: 1px solid #e5e7eb;
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .footer-section h3 {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            color: var(--white);
-        }
-
-        .footer-section p {
-            margin-bottom: 0.8rem;
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
-
-        .social-links {
+        .checkout-summary {
+            padding: 2rem;
+            background: #f9fafb;
             display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .social-links a {
-            width: 35px;
-            height: 35px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .payment-method {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
             display: flex;
             align-items: center;
-            justify-content: center;
-            color: var(--white);
-            text-decoration: none;
-            transition: var(--transition);
+            cursor: pointer;
+            transition: 0.2s;
         }
 
-        .social-links a:hover {
-            background: var(--primary);
-            transform: translateY(-3px);
+        .payment-method:hover { border-color: var(--primary); background: #f0fdfe; }
+        .payment-method.active { border: 2px solid var(--primary); background: #f0fdfe; }
+
+        .radio-circle {
+            width: 18px; height: 18px; border: 2px solid #d1d5db; border-radius: 50%; margin-right: 1rem; position: relative;
+        }
+        .payment-method.active .radio-circle { border-color: var(--primary); }
+        .payment-method.active .radio-circle::after {
+            content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 10px; height: 10px; background: var(--primary); border-radius: 50%;
         }
 
-        .footer-bottom {
-            text-align: center;
-            padding-top: 1.5rem;
-            margin-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.8rem;
-            opacity: 0.8;
+        .payment-icon { font-size: 1.5rem; margin-right: 1rem; width: 40px; text-align: center; }
+        .logo-dana { color: #118eea; } .logo-gopay { color: #00b14f; } .logo-bca { color: #003cba; }
+
+        .summary-row { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 0.9rem; }
+        .total-row {
+            border-top: 1px solid #e5e7eb; margin-top: 1rem; padding-top: 1rem;
+            display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem; color: var(--primary-dark);
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .btn-pay {
+            width: 100%; padding: 1rem; border: none; border-radius: 8px;
+            background: linear-gradient(90deg, #7e22ce 0%, #00C4CC 100%); color: white;
+            font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; margin-top: 1rem;
+        }
+        .btn-pay:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; pointer-events: none; transition: 0.3s;
+        }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        .modal-card {
+            background: white; padding: 2.5rem; border-radius: 12px; text-align: center; max-width: 400px;
+            transform: scale(0.8); transition: 0.3s;
+        }
+        .modal-overlay.show .modal-card { transform: scale(1); }
+        .success-icon {
+            width: 80px; height: 80px; background: #d1fae5; color: var(--success);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; margin: 0 auto 1.5rem;
         }
 
-        .animate-fadeInUp {
-            animation: fadeInUp 1s ease;
+        /* --- RESPONSIVE --- */
+        @media (max-width: 1024px) {
+            .panel-row, .checkout-container { grid-template-columns: 1fr; }
         }
 
-        .animate-fadeInUp-delay-1 {
-            animation: fadeInUp 1s ease 0.2s both;
-        }
-
-        .animate-fadeInUp-delay-2 {
-            animation: fadeInUp 1s ease 0.4s both;
-        }
-
-        /* Responsive Design - Enhanced */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
+            .sidebar {
+                position: fixed;
+                bottom: 0;
+                left: 0,
+                width: 100%;
+                height: 60px;
+                flex-direction: row;
+                justify-content: space-around;
+                padding-top: 0;
+                border-top: 1px solid #333;
             }
+            
+            .sidebar-logo { display: none; }
+            .nav-item { margin-bottom: 0; }
+            .nav-item.active::after {
+                width: 20px;
+                height: 4px;
+                top: -6px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .nav-tooltip { display: none; }
 
-            .mobile-menu {
-                display: block;
+            .main-wrapper {
+                padding-bottom: 60px; /* Space for bottom nav */
             }
-
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-
-            .cta-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .services-grid,
-            .portfolio-grid,
-            .testimonials-grid,
-            .pricing-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .portfolio-item img {
-                height: 180px;
-            }
+            
+            .workspace { padding: 1rem; }
+            .hero-title { font-size: 2rem; }
         }
 
-        @media (max-width: 480px) {
-            .hero {
-                padding: 3rem 1rem;
-            }
-
-            .hero h1 {
-                font-size: 1.5rem;
-            }
-
-            .section-title h2 {
-                font-size: 1.5rem;
-            }
-
-            .btn {
-                padding: 0.7rem 1.2rem;
-                font-size: 0.85rem;
-                min-width: 120px;
-            }
-
-            .form-group input,
-            .form-group textarea,
-            .form-group select {
-                padding: 0.7rem;
-                font-size: 0.85rem;
-            }
-
-            .footer-section h3 {
-                font-size: 1rem;
-            }
-
-            .footer-section p {
-                font-size: 0.85rem;
-            }
+        /* Utility */
+        .text-gradient {
+            background: linear-gradient(90deg, #7e22ce, #00C4CC);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .badge-pro {
+            background: #fce7f3;
+            color: #db2777;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 8px;
         }
 
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .services-grid,
-            .portfolio-grid,
-            .testimonials-grid,
-            .pricing-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        /* Toast Notification */
+        .toast-container {
+            position: fixed,
+            bottom: 20px,
+            right: 20px,
+            z-index: 9999,
         }
-
-        /* Loading Animation */
-        .loader {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--white);
+        .toast {
+            background: #1f2937;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-top: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s ease;
             display: flex;
-            justify-content: center;
             align-items: center;
-            z-index: 9999;
-            transition: opacity 0.5s;
+            gap: 0.8rem;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
         }
 
-        .loader.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--light);
-            border-top: 5px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loader" id="loader">
-        <div class="spinner"></div>
-    </div>
 
-    <!-- Header -->
-    <header class="header">
-        <div class="nav-container">
-            <a href="#" class="logo">
-                <i class="fas fa-palette"></i>
-                Design Studio
-            </a>
-            <nav>
-                <ul class="nav-links">
-                    <li><a href="#home">Beranda</a></li>
-                    <li><a href="#services">Layanan</a></li>
-                    <li><a href="#canva">Canva Integration</a></li>
-                    <li><a href="#portfolio">Portofolio</a></li>
-                    <li><a href="#pricing">Harga</a></li>
-                    <li><a href="#contact">Kontak</a></li>
-                </ul>
-            </nav>
-            <div class="mobile-menu">
-                <i class="fas fa-bars"></i>
-            </div>
+    <div class="bg-pattern"></div>
+
+    <!-- SIDEBAR (Canva Left Rail) -->
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <i class="fas fa-shapes"></i>
         </div>
-    </header>
-
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
-        <div class="mobile-menu-content">
-            <div class="mobile-close" id="mobileClose">
-                <i class="fas fa-times"></i>
-            </div>
-            <div class="mobile-nav-links">
-                <a href="#home">Beranda</a>
-                <a href="#services">Layanan</a>
-                <a href="#canva">Canva Integration</a>
-                <a href="#portfolio">Portofolio</a>
-                <a href="#pricing">Harga</a>
-                <a href="#contact">Kontak</a>
-            </div>
+        
+        <div class="nav-item active" onclick="switchTab(this, 'home')">
+            <i class="fas fa-home"></i>
+            <span class="nav-tooltip">Home</span>
         </div>
-    </div>
+        
+        <div class="nav-item" onclick="switchTab(this, 'templates')">
+            <i class="fas fa-th-large"></i>
+            <span class="nav-tooltip">Templates</span>
+        </div>
+        
+        <div class="nav-item" onclick="switchTab(this, 'elements')">
+            <i class="fas fa-vector-square"></i>
+            <span class="nav-tooltip">Elements</span>
+        </div>
+        
+        <div class="nav-item" onclick="switchTab(this, 'text')">
+            <i class="fas fa-font"></i>
+            <span class="nav-tooltip">Text</span>
+        </div>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-content">
-            <h1>Jasa Desain Profesional<br>Logo, Banner & Poster</h1>
-            <p>Kami menciptakan desain visual yang memukau dan efektif untuk kepentingan Anda. Dengan integrasi Canva, proses desain menjadi lebih cepat dan fleksibel.</p>
-            <div class="cta-buttons">
-                <a href="https://wa.me/62895365435586?text=Halo,%20saya%20tertarik%20dengan%20jasa%20desain%20logo/banner/poster%20Anda." 
-                   class="btn btn-primary animate-fadeInUp" 
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    <i class="fab fa-whatsapp"></i>
-                    Konsultasi Sekarang
-                </a>
-                <a href="#portfolio" class="btn btn-secondary animate-fadeInUp-delay-1">
-                    <i class="fas fa-eye"></i>
-                    Lihat Portofolio
+        <div class="nav-item" onclick="switchTab(this, 'projects')">
+            <i class="fas fa-folder-open"></i>
+            <span class="nav-tooltip">My Projects</span>
+        </div>
+    </aside>
+
+    <!-- MAIN WRAPPER -->
+    <main class="main-wrapper">
+        <!-- TOP BAR -->
+        <header class="top-bar">
+            <div class="project-info">
+                <i class="fas fa-chevron-left" style="color: var(--text-light); cursor: pointer;" onclick="goHome()"></i>
+                <div class="project-title">
+                    <span id="pageTitle">Design Studio Services</span>
+                    <i class="fas fa-pen" style="font-size: 0.8rem; color: var(--text-light); margin-left: 8px;"></i>
+                </div>
+                <span style="font-size: 0.8rem; color: var(--text-light); background: #f3f4f6; padding: 2px 6px; border-radius: 4px;">Auto-saved</span>
+            </div>
+
+            <div class="project-actions">
+                <button class="btn-canva btn-ghost" onclick="showToast('Presentation Mode Active')">
+                    <i class="fas fa-play"></i> Present
+                </button>
+                <button class="btn-canva btn-ghost" onclick="showToast('Share link copied!')">
+                    <i class="fas fa-share"></i> Share
+                </button>
+                <a href="https://wa.me/62895365435586?text=Hello,%20I%20am%20interested%20in%20your%20design%20service" 
+                   target="_blank" 
+                   class="btn-canva btn-primary">
+                    <i class="fab fa-whatsapp"></i> Contact Designer
                 </a>
             </div>
-        </div>
-    </section>
+        </header>
 
-    <!-- Services Section -->
-    <section class="services" id="services">
-        <div class="section-title">
-            <h2>Layanan Kami</h2>
-            <p>Kami menawarkan berbagai layanan desain profesional dengan kualitas premium</p>
-        </div>
-        <div class="services-grid">
-            <div class="service-card animate-fadeInUp">
-                <div class="service-icon">
-                    <i class="fas fa-image"></i>
-                </div>
-                <h3>Logo Design</h3>
-                <p>Desain logo unik dan profesional yang merepresentasikan identitas brand Anda dengan sempurna.</p>
-                <ul class="service-features">
-                    <li><i class="fas fa-check"></i> Desain kustom sesuai brand</li>
-                    <li><i class="fas fa-check"></i> Multiple konsep</li>
-                    <li><i class="fas fa-check"></i> File dalam berbagai format</li>
-                    <li><i class="fas fa-check"></i> Revisi tanpa batas</li>
-                </ul>
-            </div>
-            <div class="service-card animate-fadeInUp-delay-1">
-                <div class="service-icon">
-                    <i class="fas fa-bullhorn"></i>
-                </div>
-                <h3>Banner Design</h3>
-                <p>Banner menarik untuk promosi online dan offline yang efektif menarik perhatian audiens.</p>
-                <ul class="service-features">
-                    <li><i class="fas fa-check"></i> Desain responsive</li>
-                    <li><i class="fas fa-check"></i> Optimasi untuk berbagai platform</li>
-                    <li><i class="fas fa-check"></i> Animasi opsional</li>
-                    <li><i class="fas fa-check"></i> Fast delivery</li>
-                </ul>
-            </div>
-            <div class="service-card animate-fadeInUp-delay-2">
-                <div class="service-icon">
-                    <i class="fas fa-paper-plane"></i>
-                </div>
-                <h3>Poster Design</h3>
-                <p>Poster profesional untuk acara, promosi, atau branding yang menciptakan dampak visual maksimal.</p>
-                <ul class="service-features">
-                    <li><i class="fas fa-check"></i> Desain high-impact</li>
-                    <li><i class="fas fa-check"></i> Print-ready quality</li>
-                    <li><i class="fas fa-check"></i> Custom size</li>
-                    <li><i class="fas fa-check"></i> Multiple format</li>
-                </ul>
-            </div>
-        </div>
-    </section>
+        <!-- WORKSPACE CONTENT -->
+        <div class="workspace">
+            
+            <!-- VIEW 1: ORIGINAL HOME (Services & Pricing) -->
+            <div id="view-home" class="view-section canvas-container">
+                
+                <!-- ARTBOARD HERO (Interactive Draggable Text) -->
+                <div class="artboard">
+                    <div style="position: absolute; top: 10px; right: 10px; display: flex; gap: 5px;">
+                        <span style="background: #f3f4f6; padding: 2px 5px; border-radius: 3px; font-size: 10px;">100%</span>
+                    </div>
 
-    <!-- Canva Integration Section -->
-    <section class="canva-section" id="canva">
-        <div class="canva-content">
-            <h2>Integrasi Canva Pro</h2>
-            <p>Kami menggunakan Canva Pro untuk memberikan hasil desain berkualitas premium dengan fitur lengkap dan template profesional.</p>
-            <div class="canva-preview">
-                <iframe class="canva-iframe" src="https://www.canva.com/design/DAG744Vv9cg/QIs9xAqY1t0T1ONcKv6HsA/view?embed" allowfullscreen></iframe>
-            </div>
-            <div class="cta-buttons">
-                <a href="https://wa.me/62895365435586?text=Halo,%20saya%20tertarik%20dengan%20jasa%20desain%20Anda." 
-                   class="btn btn-primary"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    <i class="fab fa-whatsapp"></i>
-                    Mulai Project Anda
-                </a>
-                <a href="https://www.canva.com/design/DAG744Vv9cg/n0NMFensOK3IVDFB3RA-cg/edit?utm_content=DAG744Vv9cg&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton" class="btn btn-secondary">
-                    <i class="fas fa-play"></i>
-                    Lihat Demo
-                </a>
-            </div>
-        </div>
-    </section>
+                    <!-- Draggable Container -->
+                    <div class="draggable-wrapper" id="heroTextWrapper" title="Click and drag to move">
+                        <div class="element-tag">Heading</div>
+                        <div class="resize-handle rh-tl"></div>
+                        <div class="resize-handle rh-tr"></div>
+                        <div class="resize-handle rh-bl"></div>
+                        <div class="resize-handle rh-br"></div>
+                        
+                        <h1 class="hero-title">Professional &<br>Creative Design</h1>
+                    </div>
+                    
+                    <p class="hero-desc">
+                        Create stunning logos, banners, and posters with our premium design services. Integrated with Canva technology for instant results.
+                    </p>
 
-    <!-- Portfolio Section -->
-    <section class="portfolio" id="portfolio">
-        <div class="section-title">
-            <h2>Portofolio Terkalcer</h2>
-            <p>Karya desain kami yang telah membantu ribuan bisnis sukses</p>
-        </div>
-        <div class="portfolio-grid">
-            <div class="portfolio-item">
-                <img src="logo-corporate.jpg" alt="Logo Design">
-                <div class="portfolio-overlay">
-                    <h3>Logo Corporate</h3>
-                    <p>Design untuk perusahaan teknologi</p>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <img src="social-media-banner.jpg" alt="Banner Design">
-                <div class="portfolio-overlay">
-                    <h3>Social Media Banner</h3>
-                    <p>Promosi produk digital</p>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <img src="event-poster.jpg" alt="Poster Design">
-                <div class="portfolio-overlay">
-                    <h3>Event Poster</h3>
-                    <p>Konser musik internasional</p>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <img src="brand-identity.jpg" alt="Logo Design">
-                <div class="portfolio-overlay">
-                    <h3>Brand Identity</h3>
-                    <p>Startup fintech</p>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <img src="E-commerce-banner.jpg" alt="Banner Design">
-                <div class="portfolio-overlay">
-                    <h3>E-commerce Banner</h3>
-                    <p>Promosi flash sale</p>
-                </div>
-            </div>
-            <div class="portfolio-item">
-                <img src="product-launch.jpg" alt="Poster Design">
-                <div class="portfolio-overlay">
-                    <h3>Product Launch</h3>
-                    <p>Smartphone baru</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials Section -->
-    <section class="testimonials">
-        <div class="section-title">
-            <h2>Apa Kata Klien Kami</h2>
-            <p>Ulasan dari pelanggan yang puas dengan layanan kami</p>
-        </div>
-        <div class="testimonials-grid">
-            <div class="testimonial-card animate-fadeInUp">
-                <div class="testimonial-content">
-                    Desain logo yang diberikan sangat profesional dan sesuai dengan visi brand kami. Prosesnya cepat dan komunikasi lancar.
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-avatar">JD</div>
-                    <div class="author-info">
-                        <h4>HASAN</h4>
-                        <p>CEO, Tech Startup</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button class="btn-canva btn-primary" onclick="document.getElementById('services').scrollIntoView({behavior: 'smooth'})">
+                            Start Designing
+                        </button>
+                        <button class="btn-canva btn-ghost" style="border: 1px solid #e5e7eb;">
+                            View Portfolio
+                        </button>
                     </div>
                 </div>
-            </div>
-            <div class="testimonial-card animate-fadeInUp-delay-1">
-                <div class="testimonial-content">
-                    Banner sosial media yang dibuat sangat efektif, traffic website kami naik 40% setelah menggunakan jasa mereka.
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-avatar">SM</div>
-                    <div class="author-info">
-                        <h4>OMAN</h4>
-                        <p>Marketing Manager</p>
-                    </div>
-                </div>
-            </div>
-            <div class="testimonial-card animate-fadeInUp-delay-2">
-                <div class="testimonial-content">
-                    Poster acara kami mendapatkan banyak perhatian berkat desain yang menarik dan profesional. Sangat puas!
-                </div>
-                <div class="testimonial-author">
-                    <div class="author-avatar">AK</div>
-                    <div class="author-info">
-                        <h4>ROY</h4>
-                        <p>Event Organizer</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
 
-    <!-- Pricing Section - MODIFIED -->
-    <section class="pricing" id="pricing">
-        <div class="section-title">
-            <h2>Paket Harga</h2>
-            <p>Pilih paket yang sesuai dengan kebutuhan Anda</p>
-        </div>
-        <div class="pricing-grid">
-            <div class="pricing-card">
-                <h3>Basic</h3>
-                <div class="price">Rp 500k<span>/proyek</span></div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check"></i> 1 konsep desain</li>
-                    <li><i class="fas fa-check"></i> 2 revisi</li>
-                    <li><i class="fas fa-check"></i> File PNG & JPG</li>
-                    <li><i class="fas fa-times"></i> Canva template</li>
-                    <li><i class="fas fa-times"></i> Support prioritas</li>
-                </ul>
-                <!-- MODIFIED: WhatsApp button -->
-                <a href="https://wa.me/62895365435586?text=Saya%20tertarik%20dengan%20paket%20Basic%20-%20Logo/Banner/Poster%20Design%20sebesar%20Rp%20500k" 
-                   class="btn btn-primary"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    <i class="fab fa-whatsapp"></i>
-                    Pesan Paket Basic
-                </a>
-            </div>
-            <div class="pricing-card featured">
-                <h3>Professional</h3>
-                <div class="price">Rp 1.5juta<span>/proyek</span></div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check"></i> 3 konsep desain</li>
-                    <li><i class="fas fa-check"></i> Revisi tanpa batas</li>
-                    <li><i class="fas fa-check"></i> File semua format</li>
-                    <li><i class="fas fa-check"></i> Canva template premium</li>
-                    <li><i class="fas fa-check"></i> Support 24/7</li>
-                </ul>
-                <!-- MODIFIED: WhatsApp button -->
-                <a href="https://wa.me/62895365435586?text=Saya%20tertarik%20dengan%20paket%20Professional%20-%20Logo/Banner/Poster%20Design%20sebesar%20Rp%201.5juta" 
-                   class="btn btn-primary"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    <i class="fab fa-whatsapp"></i>
-                    Pesan Paket Professional
-                </a>
-            </div>
-            <div class="pricing-card">
-                <h3>Enterprise</h3>
-                <div class="price">Rp 3juta<span>/proyek</span></div>
-                <ul class="pricing-features">
-                    <li><i class="fas fa-check"></i> 5+ konsep desain</li>
-                    <li><i class="fas fa-check"></i> Revisi tanpa batas</li>
-                    <li><i class="fas fa-check"></i> File semua format + source</li>
-                    <li><i class="fas fa-check"></i> Canva template premium</li>
-                    <li><i class="fas fa-check"></i> DEDICATED support</li>
-                </ul>
-                <!-- MODIFIED: WhatsApp button -->
-                <a href="https://wa.me/62895365435586?text=Saya%20tertarik%20dengan%20paket%20Enterprise%20-%20Logo/Banner/Poster%20Design%20sebesar%20Rp%203juta" 
-                   class="btn btn-primary"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    <i class="fab fa-whatsapp"></i>
-                    Pesan Paket Enterprise
-                </a>
-            </div>
-        </div>
-    </section>
+                <!-- TEMPLATES SECTION (SERVICES) -->
+                <div id="services">
+                    <div class="section-header">
+                        <h2 class="section-title">Service Templates</h2>
+                        <a href="#" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 600;">View All <i class="fas fa-arrow-right"></i></a>
+                    </div>
 
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="contact-content">
-            <h2>Hubungi Kami</h2>
-            <p>Silakan hubungi kami untuk konsultasi gratis atau pertanyaan lebih lanjut</p>
-            <div class="contact-form">
-                <form id="contactForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Nama Lengkap</label>
-                            <input type="text" id="name" name="name" placeholder="Nama Anda" required>
+                    <div class="template-scroller">
+                        <!-- Service 1 -->
+                        <div class="template-card">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #e0e7ff, #fae8ff);">
+                                <i class="fas fa-bezier-curve" style="color: var(--secondary);"></i>
+                            </div>
+                            <div class="template-info">
+                                <h3>Logo Design</h3>
+                                <p>Strong and unique brand identity.</p>
+                                <div class="template-action">
+                                    <span class="price-tag">Start Rp 500k</span>
+                                    <button class="btn-canva btn-ghost" style="padding: 4px 8px; font-size: 0.8rem;" onclick="openDetail('Logo')">Edit</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" placeholder="email@contoh.com" required>
+
+                        <!-- Service 2 -->
+                        <div class="template-card">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #ccfbf1, #f0fdf4);">
+                                <i class="fas fa-panorama" style="color: var(--primary);"></i>
+                            </div>
+                            <div class="template-info">
+                                <h3>Social Media Banner</h3>
+                                <p>Catch attention on Instagram & FB feed.</p>
+                                <div class="template-action">
+                                    <span class="price-tag">Start Rp 350k</span>
+                                    <button class="btn-canva btn-ghost" style="padding: 4px 8px; font-size: 0.8rem;" onclick="openDetail('Banner')">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Service 3 -->
+                        <div class="template-card">
+                            <div class="template-preview" style="background: linear-gradient(135deg, #fff7ed, #ffedd5);">
+                                <i class="fas fa-scroll" style="color: #ea580c;"></i>
+                            </div>
+                            <div class="template-info">
+                                <h3>Poster & Flyer</h3>
+                                <p>Print-ready quality for events & promo.</p>
+                                <div class="template-action">
+                                    <span class="price-tag">Start Rp 400k</span>
+                                    <button class="btn-canva btn-ghost" style="padding: 4px 8px; font-size: 0.8rem;" onclick="openDetail('Poster')">Edit</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="service">Layanan yang Diminati</label>
-                        <select id="service" name="service" required>
-                            <option value="">Pilih layanan</option>
-                            <option value="logo">Logo Design</option>
-                            <option value="banner">Banner Design</option>
-                            <option value="poster">Poster Design</option>
-                            <option value="all">Semua Layanan</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="message">Pesan Anda</label>
-                        <textarea id="message" name="message" rows="4" placeholder="Tentukan kebutuhan desain Anda..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">
-                        <i class="fas fa-paper-plane"></i>
-                        Kirim Pesan
-                    </button>
-                </form>
-            </div>
-            <div class="cta-buttons">
-                <a href="tel:+62895365435586" class="btn btn-secondary">
-                    <i class="fas fa-phone"></i>
-                    Hubungi Sekarang
-                </a>
-                <a href="mailto:bayusekti28@gmail.com" class="btn btn-secondary">
-                    <i class="fas fa-envelope"></i>
-                    Email Kami
-                </a>
-            </div>
-        </div>
-    </section>
+                </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Tentang Kami</h3>
-                <p>Design Studio adalah agen kreatif terpercaya yang menyediakan layanan desain profesional untuk bisnis di seluruh Indonesia.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Layanan</h3>
-                <p>Logo Design</p>
-                <p>Banner Design</p>
-                <p>Poster Design</p>
-                <p>Brand Identity</p>
-            </div>
-            <div class="footer-section">
-                <h3>Kontak</h3>
-                <p><i class="fas fa-map-marker-alt"></i> Jakarta, Indonesia</p>
-                <p><i class="fas fa-phone"></i> +62 895-3654-35586</p>
-                <p><i class="fas fa-envelope"></i> bayusekti28@gmail.com</p>
-                <div class="social-links">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-instagram"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                    <a href="#"><i class="fab fa-behance"></i></a>
+                <!-- DASHBOARD / PANEL ROW (PORTFOLIO & PRICING) -->
+                <div class="panel-row">
+                    <!-- Left Column: Portfolio / Canva Embed -->
+                    <div class="content-panel">
+                        <div class="section-header">
+                            <h2 class="section-title">Recent Designs <span class="badge-pro">PRO</span></h2>
+                        </div>
+                        
+                        <!-- Canva Integration -->
+                        <div style="width: 100%; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; margin-bottom: 2rem;">
+                            <div style="background: #f9fafb; padding: 0.5rem 1rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center;">
+                                <span style="font-size: 0.85rem; font-weight: 600;"><i class="fas fa-layer-group" style="color: var(--primary); margin-right: 5px;"></i> Canva Editor Preview</span>
+                                <button style="border: none; background: none; color: var(--text-light); cursor: pointer;"><i class="fas fa-expand"></i></button>
+                            </div>
+                            <iframe src="https://www.canva.com/design/DAG744Vv9cg/QIs9xAqY1t0T1ONcKv6HsA/view?embed" width="100%" height="350" allowfullscreen></iframe>
+                        </div>
+
+                        <h3 style="margin-bottom: 1rem; font-size: 1rem;">Client Gallery</h3>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
+                            <!-- Gallery Items -->
+                            <div style="aspect-ratio: 1; background: #eee; border-radius: 8px; overflow: hidden; position: relative; group-hover:opacity-80;">
+                                <img src="logo-corporate.jpg" alt="Work" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: white; font-size: 0.7rem; padding: 4px;">Corp Logo</div>
+                            </div>
+                            <div style="aspect-ratio: 1; background: #eee; border-radius: 8px; overflow: hidden; position: relative;">
+                                <img src="E-commerce-banner.jpg" alt="Work" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: white; font-size: 0.7rem; padding: 4px;">Banner Ad</div>
+                            </div>
+                            <div style="aspect-ratio: 1; background: #eee; border-radius: 8px; overflow: hidden; position: relative;">
+                                <img src="event-poster.jpg" alt="Work" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: white; font-size: 0.7rem; padding: 4px;">Event Poster</div>
+                            </div>
+                            <div style="aspect-ratio: 1; background: #eee; border-radius: 8px; overflow: hidden; position: relative;">
+                                <img src="brand-identity.jpg" alt="Work" style="width: 100%; height: 100%; object-fit: cover;">
+                                <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.6); color: white; font-size: 0.7rem; padding: 4px;">Brand Kit</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Pricing / Contact Properties -->
+                    <div class="properties-sidebar">
+                        <div class="property-title">Pricing Plans</div>
+                        
+                        <!-- Pricing Items styled as Layers/Settings -->
+                        <div style="display: flex; flex-direction: column; gap: 1rem;">
+                            <!-- BASIC (Updated with Standard Label) -->
+                            <div style="border: 1px solid #9ca3af; border-radius: 6px; padding: 1rem; position: relative;">
+                                <div style="position: absolute; top: -8px; left: 10px; background: #9ca3af; color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">STANDARD</div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span style="font-weight: 600; font-size: 0.9rem;">Basic</span>
+                                    <span style="color: var(--text-light); font-size: 0.85rem;">Rp 500k</span>
+                                </div>
+                                <ul style="list-style: none; font-size: 0.8rem; color: var(--text-light); margin-bottom: 0.8rem; line-height: 1.4;">
+                                    <li><i class="fas fa-check" style="color: var(--primary); font-size: 0.7rem; margin-right: 4px;"></i> 1 Concept</li>
+                                    <li><i class="fas fa-check" style="color: var(--primary); font-size: 0.7rem; margin-right: 4px;"></i> 2 Revisions</li>
+                                    <li><i class="fas fa-check" style="color: var(--primary); font-size: 0.7rem; margin-right: 4px;"></i> JPG/PNG Files</li>
+                                </ul>
+                                <!-- CHANGED: Now opens Checkout instead of WhatsApp -->
+                                <button class="btn-canva btn-primary" style="width: 100%; justify-content: center; padding: 0.4rem; font-size: 0.8rem;" onclick="openCheckout('Basic', 500000)">Select</button>
+                            </div>
+
+                            <!-- PROFESSIONAL -->
+                            <div style="border: 2px solid var(--primary); border-radius: 6px; padding: 1rem; background: #f0fdfe; position: relative;">
+                                <div style="position: absolute; top: -8px; left: 10px; background: var(--primary); color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">BEST VALUE</div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span style="font-weight: 700; font-size: 0.95rem; color: var(--primary-dark);">Professional</span>
+                                    <span style="color: var(--primary-dark); font-weight: 700;">Rp 1.5m</span>
+                                </div>
+                                <ul style="list-style: none; font-size: 0.8rem; color: var(--text-dark); margin-bottom: 0.8rem; line-height: 1.4;">
+                                    <li><i class="fas fa-check" style="color: var(--secondary); font-size: 0.7rem; margin-right: 4px;"></i> 3 Concepts</li>
+                                    <li><i class="fas fa-check" style="color: var(--secondary); font-size: 0.7rem; margin-right: 4px;"></i> Unlimited Revisions</li>
+                                    <li><i class="fas fa-check" style="color: var(--secondary); font-size: 0.7rem; margin-right: 4px;"></i> Source File (AI/EPS)</li>
+                                </ul>
+                                <!-- CHANGED: Now opens Checkout instead of WhatsApp -->
+                                <button class="btn-canva btn-primary" style="width: 100%; justify-content: center; padding: 0.4rem; font-size: 0.8rem;" onclick="openCheckout('Professional', 1500000)">Select</button>
+                            </div>
+
+                            <!-- CORPORATE -->
+                            <div style="border: 2px solid #fbbf24; border-radius: 6px; padding: 1rem; background: #fffbeb; position: relative;">
+                                <div style="position: absolute; top: -8px; left: 10px; background: #fbbf24; color: white; font-size: 0.6rem; padding: 2px 6px; border-radius: 4px;">PREMIUM</div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span style="font-weight: 700; font-size: 0.95rem; color: #b45309;">Corporate</span>
+                                    <span style="color: #b45309; font-weight: 700;">Rp 3 Million</span>
+                                </div>
+                                <ul style="list-style: none; font-size: 0.8rem; color: var(--text-dark); margin-bottom: 0.8rem; line-height: 1.4;">
+                                    <li><i class="fas fa-star" style="color: #fbbf24; font-size: 0.7rem; margin-right: 4px;"></i> 5+ Exclusive Concepts</li>
+                                    <li><i class="fas fa-star" style="color: #fbbf24; font-size: 0.7rem; margin-right: 4px;"></i> Brand Identity Guideline</li>
+                                    <li><i class="fas fa-star" style="color: #fbbf24; font-size: 0.7rem; margin-right: 4px;"></i> Social Media Kit (10 Templates)</li>
+                                    <li><i class="fas fa-star" style="color: #fbbf24; font-size: 0.7rem; margin-right: 4px;"></i> Dedicated Designer</li>
+                                    <li><i class="fas fa-star" style="color: #fbbf24; font-size: 0.7rem; margin-right: 4px;"></i> All Source Files (AI, PSD, PDF)</li>
+                                </ul>
+                                <!-- CHANGED: Now opens Checkout instead of WhatsApp -->
+                                <button class="btn-canva btn-gold" style="width: 100%; justify-content: center; padding: 0.4rem; font-size: 0.8rem;" onclick="openCheckout('Corporate', 3000000)">Select</button>
+                            </div>
+
+                        </div>
+
+                        <!-- Contact Form inside properties panel -->
+                        <div class="property-title" style="margin-top: 2rem;">Send Message</div>
+                        <form 
+                          id="quickContact"
+                          action="https://formspree.io/f/mdanjqkl"
+                          method="POST"
+                        >
+                          <div class="form-group-canva">
+                            <label for="email">Your email:</label>
+                            <input type="email" name="email" class="input-canva" placeholder="email@example.com" required>
+                          </div>
+                          
+                          <div class="form-group-canva">
+                            <label for="message">Your message:</label>
+                            <textarea name="message" class="input-canva" rows="3" placeholder="I need a design for..." required></textarea>
+                          </div>
+
+                          <!-- Optional: Hidden field for Subject -->
+                          <input type="hidden" name="_subject" value="New Inquiry from Design Studio Website">
+
+                          <button type="submit" class="btn-canva btn-primary" style="width: 100%; justify-content: center; padding: 0.4rem;">
+                              <i class="fas fa-paper-plane"></i> Send
+                          </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- TESTIMONIALS (Color Palette Style) -->
+                <div>
+                    <div class="property-title">Client Reviews</div>
+                    <div class="color-grid">
+                        <div class="testimonial-swatch" style="flex: 1; min-width: 250px;">
+                            <div class="swatch-header">
+                                <div class="swatch-avatar">HS</div>
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem;">HASAN</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-light);">CEO, Tech Startup</div>
+                                </div>
+                            </div>
+                            <p style="font-style: italic; font-size: 0.85rem; color: var(--text-dark);">"The logo design is very professional. I really like the color variations!"</p>
+                        </div>
+
+                        <div class="testimonial-swatch" style="flex: 1; min-width: 250px;">
+                            <div class="swatch-header">
+                                <div class="swatch-avatar" style="background: linear-gradient(135deg, #f59e0b, #ef4444);">OM</div>
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem;">OMAN</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-light);">Marketing Manager</div>
+                                </div>
+                            </div>
+                            <p style="font-style: italic; font-size: 0.85rem; color: var(--text-dark);">"The banners are very responsive and increased our ad click-through rate."</p>
+                        </div>
+
+                        <div class="testimonial-swatch" style="flex: 1; min-width: 250px;">
+                            <div class="swatch-header">
+                                <div class="swatch-avatar" style="background: linear-gradient(135deg, #10b981, #3b82f6);">RY</div>
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.9rem;">ROY</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-light);">Event Organizer</div>
+                                </div>
+                            </div>
+                            <p style="font-style: italic; font-size: 0.85rem; color: var(--text-dark);">"Super fast turnaround and they handle revisions patiently. Highly recommended!"</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div> <!-- END VIEW 1: HOME -->
+
+
+            <!-- VIEW 2: CHECKOUT (Hidden by default) -->
+            <div id="view-checkout" class="view-section hidden">
+                <div class="checkout-container">
+                    <!-- LEFT: FORM -->
+                    <div class="checkout-form">
+                        <div class="section-title"><i class="fas fa-user-edit"></i> Customer Information</div>
+                        <form id="paymentForm">
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">Full Name</label>
+                                <input type="text" class="input-canva" placeholder="John Doe" required id="custName">
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">Email Address</label>
+                                <input type="email" class="input-canva" placeholder="john@example.com" required id="custEmail">
+                            </div>
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.5rem;">WhatsApp</label>
+                                <input type="tel" class="input-canva" placeholder="0812-3456-7890" required id="custPhone">
+                            </div>
+
+                            <div class="section-title" style="margin-top: 2rem;"><i class="fas fa-wallet"></i> Payment Method</div>
+                            <div class="payment-options">
+                                <div class="payment-method" onclick="selectPayment(this)">
+                                    <div class="radio-circle"></div>
+                                    <div class="payment-icon logo-dana"><i class="fas fa-wallet"></i></div>
+                                    <div><h4 style="font-size: 0.9rem; font-weight: 600;">DANA</h4><p style="font-size: 0.8rem; color: #666;">Scan QR / Transfer</p></div>
+                                </div>
+                                <div class="payment-method" onclick="selectPayment(this)">
+                                    <div class="radio-circle"></div>
+                                    <div class="payment-icon logo-gopay"><i class="fas fa-bicycle"></i></div>
+                                    <div><h4 style="font-size: 0.9rem; font-weight: 600;">GoPay</h4><p style="font-size: 0.8rem; color: #666;">Instant Payment</p></div>
+                                </div>
+                                <div class="payment-method" onclick="selectPayment(this)">
+                                    <div class="radio-circle"></div>
+                                    <div class="payment-icon logo-bca"><i class="fas fa-university"></i></div>
+                                    <div><h4 style="font-size: 0.9rem; font-weight: 600;">BCA Mobile</h4><p style="font-size: 0.8rem; color: #666;">Virtual Account</p></div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="selectedPayment" name="payment_method">
+                        </form>
+                    </div>
+
+                    <!-- RIGHT: SUMMARY -->
+                    <div class="checkout-summary">
+                        <div>
+                            <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px; color: #9ca3af;">Order Summary</h3>
+                            <div class="summary-row"><span>Design Plan</span><span id="summaryPlan">Professional</span></div>
+                            <div class="summary-row"><span>Fee</span><span>Rp 0</span></div>
+                            <div class="total-row"><span>Total</span><span id="summaryTotal">Rp 1.500.000</span></div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn-pay" onclick="processPayment()">Pay Now <i class="fas fa-arrow-right"></i></button>
+                            <button type="button" class="btn-canva btn-ghost" style="width: 100%; justify-content: center; margin-top: 0.5rem;" onclick="goHome()">Cancel</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Design Studio. All rights reserved. | Made with <i class="fas fa-heart" style="color: var(--secondary);"></i> for creative businesses</p>
+    </main>
+
+    <!-- SUCCESS MODAL -->
+    <div class="modal-overlay" id="successModal">
+        <div class="modal-card">
+            <div class="success-icon"><i class="fas fa-check"></i></div>
+            <h2>Payment Successful!</h2>
+            <p style="color: #666; margin: 1rem 0;">Thank you! A confirmation has been sent to your email and WhatsApp.</p>
+            <button class="btn-canva btn-primary" style="width: 100%; justify-content: center;" onclick="goHome()">Back to Home</button>
         </div>
-    </footer>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+        // --- NAVIGATION & VIEW LOGIC ---
+        function goHome() {
+            document.getElementById('view-checkout').classList.add('hidden');
+            document.getElementById('view-home').classList.remove('hidden');
+            document.getElementById('pageTitle').innerText = "Design Studio Services";
+            // Reset scroll
+            document.querySelector('.workspace').scrollTop = 0;
+        }
 
-        // Mobile menu toggle
-        const mobileMenu = document.querySelector('.mobile-menu');
-        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
-        const mobileClose = document.getElementById('mobileClose');
-        
-        mobileMenu.addEventListener('click', () => {
-            mobileMenuOverlay.style.display = 'block';
+        function switchTab(element, tabName) {
+            // Ensure we are on home view if clicking nav
+            document.getElementById('view-checkout').classList.add('hidden');
+            document.getElementById('view-home').classList.remove('hidden');
+            
+            // Remove active class from all
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            // Add to clicked
+            element.classList.add('active');
+            
+            // Smooth scroll to section (simulated navigation)
+            if(tabName === 'home') {
+                document.querySelector('.workspace').scrollTo({top: 0, behavior: 'smooth'});
+            } else if (tabName === 'templates') {
+                document.getElementById('services').scrollIntoView({behavior: 'smooth'});
+            } else if (tabName === 'projects') {
+                // Just a feedback toast for demo
+                showToast('Opening Projects Folder...');
+            }
+        }
+
+        // --- CHECKOUT LOGIC ---
+        function openCheckout(planName, price) {
+            // Populate Data
+            document.getElementById('summaryPlan').innerText = planName;
+            document.getElementById('summaryTotal').innerText = formatRupiah(price);
+            
+            // Switch View
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-checkout').classList.remove('hidden');
+            document.getElementById('pageTitle').innerText = "Checkout";
+            document.querySelector('.workspace').scrollTop = 0;
+        }
+
+        function selectPayment(element) {
+            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            const method = element.querySelector('h4').innerText;
+            document.getElementById('selectedPayment').value = method;
+        }
+
+        function processPayment() {
+            const form = document.getElementById('paymentForm');
+            const method = document.getElementById('selectedPayment').value;
+
+            // Validation
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            if (!method) {
+                showToast("Please select a payment method.");
+                return;
+            }
+
+            // Simulate Processing
+            const btn = document.querySelector('.btn-pay');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
             setTimeout(() => {
-                mobileMenuOverlay.style.opacity = '1';
-            }, 10);
+                document.getElementById('successModal').classList.add('show');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 2000);
+        }
+
+        // --- DRAG INTERACTION (Preserved from original) ---
+        const dragWrapper = document.getElementById('heroTextWrapper');
+        let isDragging = false;
+        let startX, startY, initialLeft, initialTop;
+
+        dragWrapper.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            
+            // Get current position
+            const rect = dragWrapper.getBoundingClientRect();
+            const parentRect = dragWrapper.parentElement.getBoundingClientRect();
+            
+            // Calculate offset relative to parent
+            initialLeft = rect.left - parentRect.left;
+            initialTop = rect.top - parentRect.top;
+
+            dragWrapper.style.cursor = 'grabbing';
+            dragWrapper.style.position = 'absolute';
+            dragWrapper.style.left = initialLeft + 'px';
+            dragWrapper.style.top = initialTop + 'px';
+            dragWrapper.style.width = rect.width + 'px'; // Maintain width
         });
 
-        mobileClose.addEventListener('click', () => {
-            mobileMenuOverlay.style.opacity = '0';
-            setTimeout(() => {
-                mobileMenuOverlay.style.display = 'none';
-            }, 300);
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const dx = e.clientX - startX;
+            const dy = e.clientY - startY;
+            
+            dragWrapper.style.left = `${initialLeft + dx}px`;
+            dragWrapper.style.top = `${initialTop + dy}px`;
         });
 
-        // Close mobile menu when clicking outside
-        mobileMenuOverlay.addEventListener('click', (e) => {
-            if (e.target === mobileMenuOverlay) {
-                mobileMenuOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    mobileMenuOverlay.style.display = 'none';
-                }, 300);
+        document.addEventListener('mouseup', () => {
+            if(isDragging) {
+                isDragging = false;
+                dragWrapper.style.cursor = 'move';
             }
         });
 
-        // Form submission
-        const contactForm = document.getElementById('contactForm');
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-            
-            // Simulate form submission
-            console.log('Form submitted:', data);
-            
-            // Show success message
-            const successMessage = document.createElement('div');
-            successMessage.className = 'success-message';
-            successMessage.innerHTML = `
-                <div style="background: #10b981; color: white; padding: 1rem; border-radius: 10px; margin-top: 1rem; text-align: center;">
-                    <i class="fas fa-check-circle" style="margin-right: 0.5rem;"></i>
-                    Terima kasih! Kami akan segera menghubungi Anda.
-                </div>
-            `;
-            
-            this.appendChild(successMessage);
-            
-            // Reset form
-            this.reset();
-            
-            // Remove success message after 5 seconds
-            setTimeout(() => {
-                successMessage.remove();
-            }, 5000);
-        });
+        // --- FORM HANDLING (Formspree - Preserved) ---
+        const form = document.getElementById("quickContact");
+        
+        async function handleSubmit(event) {
+          event.preventDefault();
+          const data = new FormData(event.target);
+          
+          fetch(event.target.action, {
+            method: form.method,
+            body: data,
+            headers: {
+                'Accept': 'application/json'
+            }
+          }).then(response => {
+            if (response.ok) {
+                showToast("Thank you! Your message has been sent.");
+                form.reset();
+            } else {
+                showToast("Oops! There was a problem sending your message.");
+            }
+          }).catch(error => {
+            showToast("Oops! There was a problem sending your message.");
+          });
+        }
 
-        // Animate on scroll
+        form.addEventListener("submit", handleSubmit);
+
+        // --- TOAST NOTIFICATION SYSTEM (Preserved) ---
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-info-circle" style="color: var(--primary);"></i> ${message}`;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // --- TEMPLATE CLICK (Preserved) ---
+        function openDetail(type) {
+            showToast(`Opening editor for ${type}...`);
+        }
+
+        // --- ANIMATION OBSERVER (Preserved) ---
         const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
+            threshold: 0.1
         };
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fadeInUp');
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
         }, observerOptions);
 
-        // Observe all animate-fadeInUp elements
-        document.querySelectorAll('.animate-fadeInUp').forEach(el => {
+        // Apply animation to cards
+        document.querySelectorAll('.template-card').forEach((el, index) => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = `all 0.5s ease ${index * 0.1}s`;
             observer.observe(el);
         });
 
-        // Loading screen
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-            }, 1000);
-        });
-
-        // Portfolio item click handler
-        document.querySelectorAll('.portfolio-item').forEach(item => {
-            item.addEventListener('click', () => {
-                console.log('Portfolio item clicked');
-            });
-        });
-
-        // Canva integration demo
-        const canvaIframe = document.querySelector('.canva-iframe');
-        canvaIframe.addEventListener('load', () => {
-            console.log('Canva preview loaded');
-        });
-
-        // Smooth scroll restoration for page refresh
-        window.addEventListener('beforeunload', () => {
-            window.scrollTo(0, 0);
-        });
-
-        // Mobile optimization
-        if ('ontouchstart' in window) {
-            document.documentElement.classList.add('touch-device');
+        // --- UTILITY FOR FORMATTING PRICE (New for checkout) ---
+        function formatRupiah(number) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
         }
     </script>
 </body>
